@@ -1,25 +1,61 @@
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import { connect } from 'react-redux'
+import ACTION from './redux/action/action';
+// import { increamentAction, todosAction } from './redux/action/action';
 
-function App() {
+function App({increamentFunc,getTodos, count, todos, users, getUsers}) {
+  console.log(count)
+  useEffect(()=>{
+    // getTodos()
+  }, [])
+  console.log(todos)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <h1>TEST</h1>
+        <button 
+          style={{padding : 20}} 
+          onClick={()=> increamentFunc(count + 2)}
         >
-          Learn React
-        </a>
-      </header>
+          {count}
+        </button>
+        <br/>
+        <br/>
+
+        <button onClick={getUsers}>get data user</button>
+        <h2>USER LIST</h2>
+        {
+          users.map((res,i)=>(
+            <p key={i}>{res.name}</p>
+          ))
+        }
+
+        <br/>
+        <br/>
+
+        <button onClick={getTodos}>get data todos</button>
+        <h2>TODO LIST</h2>
+        {
+          todos.map((res,i)=>(
+            <p key={i}>{res.title}</p>
+          ))
+        }
+
+        
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  count : state.countReducer.count,
+  todos : state.todosReducer.todos,
+  users : state.todosReducer.users,
+})
+
+const mapDispatchToProps = {
+  increamentFunc : (data)=> ACTION.increamentCount(data),
+  getTodos : ()=> ACTION.getTodos(),
+  getUsers : ()=> ACTION.getUsers(),
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
